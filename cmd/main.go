@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"reconciliation-service/internal/di"
-	"reconciliation-service/internal/shared/config"
+	"recon-service/internal/di"
+	"recon-service/internal/shared/config"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
