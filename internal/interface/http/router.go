@@ -10,6 +10,7 @@ import (
 func (h *Handler) Register(e *echo.Echo) {
 	e.GET("/health", h.Health)
 	e.POST("/reconcile", h.Reconcile)
+	e.GET("/jobs/:id", h.GetJob)
 }
 
 func (h *Handler) Health(c echo.Context) error {

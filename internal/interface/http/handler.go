@@ -1,13 +1,14 @@
 package http
 
 import (
-	"recon-service/internal/usecase/reconcile"
+	"recon-service/internal/usecase/job"
 )
 
 type Handler struct {
-	service reconcile.Service
+	jobUsecase job.Service
+	worker     *job.Worker
 }
 
-func NewHandler(service reconcile.Service) *Handler {
-	return &Handler{service: service}
+func NewHandler(jobUsecase job.Service, worker *job.Worker) *Handler {
+	return &Handler{jobUsecase: jobUsecase, worker: worker}
 }
