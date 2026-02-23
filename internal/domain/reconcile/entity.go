@@ -1,42 +1,31 @@
 package reconcile
 
-import "time"
+import (
+	"time"
 
-type TransactionType string
-
-const (
-	Debit  TransactionType = "DEBIT"
-	Credit TransactionType = "CREDIT"
+	"recon-service/internal/shared/constants"
 )
 
 type SystemTransaction struct {
-	TrxID           string
-	Amount          string
-	Type            TransactionType
-	TransactionTime time.Time
+	TrxID           string                    `json:"trx_id"`
+	Amount          string                    `json:"amount"`
+	Type            constants.TransactionType `json:"type"`
+	TransactionTime time.Time                 `json:"transaction_time"`
 }
 
 type BankTransaction struct {
-	UniqueID string
-	Amount   string
-	Type     TransactionType
-	Date     time.Time
-	BankName string
+	UniqueID string                    `json:"unique_id"`
+	Amount   string                    `json:"amount"`
+	Type     constants.TransactionType `json:"type"`
+	Date     time.Time                 `json:"date"`
+	BankName string                    `json:"bank_name"`
 }
 
 type Summary struct {
-	TotalProcessed      int
-	TotalMatched        int
-	TotalUnmatched      int
-	TotalDiscrepancy    float64
-	UnmatchedSystem     []SystemTransaction
-	UnmatchedBankByBank map[string][]BankTransaction
-}
-
-/*
-Repository abstraction
-Mockable via mockery
-*/
-type Repository interface {
-	SaveSummary(summary Summary) error
+	TotalProcessed      int                          `json:"total_processed"`
+	TotalMatched        int                          `json:"total_matched"`
+	TotalUnmatched      int                          `json:"total_unmatched"`
+	TotalDiscrepancy    float64                      `json:"total_discrepancy"`
+	UnmatchedSystem     []SystemTransaction          `json:"unmatched_system"`
+	UnmatchedBankByBank map[string][]BankTransaction `json:"unmatched_bank_by_bank"`
 }
