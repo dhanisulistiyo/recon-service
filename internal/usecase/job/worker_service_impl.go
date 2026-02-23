@@ -52,17 +52,7 @@ func (w *Worker) process(payload *JobPayload) {
 }
 
 func (w *Worker) prepareTransactions(payload *JobPayload) ([]reconcile.SystemTransaction, []reconcile.BankTransaction, error) {
-	start, err := time.Parse("2006-01-02", payload.Start)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	end, err := time.Parse("2006-01-02", payload.End)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	systemTrx, err := parseSystemCSVBytes(payload.System, start, end)
+	systemTrx, err := parseSystemCSVBytes(payload.System, payload.Start, payload.End)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -70,7 +60,7 @@ func (w *Worker) prepareTransactions(payload *JobPayload) ([]reconcile.SystemTra
 	var allBankTrx []reconcile.BankTransaction
 
 	for _, bankFile := range payload.Banks {
-		trx, err := parseBankCSVBytes(bankFile.Data, bankFile.Name, start, end)
+		trx, err := parseBankCSVBytes(bankFile.Data, bankFile.Name, payload.Start, payload.End)
 		if err != nil {
 			return nil, nil, err
 		}

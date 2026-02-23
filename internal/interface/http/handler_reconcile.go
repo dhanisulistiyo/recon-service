@@ -1,10 +1,13 @@
 package http
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"io"
 	"net/http"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/labstack/echo/v4"
 
@@ -12,11 +15,6 @@ import (
 )
 
 func (h *Handler) Reconcile(c echo.Context) error {
-	jobEntity, err := h.jobUsecase.Create()
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-
 	// read system file
 	systemFile, err := c.FormFile("system_file")
 	if err != nil {
@@ -42,6 +40,15 @@ func (h *Handler) Reconcile(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "at least one bank_file is required")
 	}
 
+	start, err := time.Parse("2006-01-02", c.FormValue("start_date"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid start_date")
+	}
+	end, err := time.Parse("2006-01-02", c.FormValue("end_date"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid end_date")
+	}
+
 	var banks []jobUsecase.BankFile
 	for _, fh := range bankFiles {
 		f, err := fh.Open()
@@ -58,12 +65,30 @@ func (h *Handler) Reconcile(c echo.Context) error {
 		banks = append(banks, jobUsecase.BankFile{Name: name, Data: b})
 	}
 
+	// --- generate idempotency key ---
+	hash := sha256.New()
+	hash.Write(systemBytes)
+	for _, b := range banks {
+		hash.Write(b.Data)
+	}
+	hash.Write([]byte(start.Format("2006-01-02")))
+	hash.Write([]byte(end.Format("2006-01-02")))
+	idempotencyKey := hex.EncodeToString(hash.Sum(nil))
+
+	// --- create new job and check idempotent ---
+	jobEntity, existJob := h.jobUsecase.CreateWithKey(idempotencyKey)
+	if existJob {
+		return c.JSON(http.StatusAccepted, map[string]string{
+			"job_id": jobEntity.ID,
+		})
+	}
+
 	h.worker.Enqueue(&jobUsecase.JobPayload{
 		JobID:  jobEntity.ID,
 		System: systemBytes,
 		Banks:  banks,
-		Start:  c.FormValue("start_date"),
-		End:    c.FormValue("end_date"),
+		Start:  start,
+		End:    end,
 	})
 
 	return c.JSON(http.StatusAccepted, map[string]string{

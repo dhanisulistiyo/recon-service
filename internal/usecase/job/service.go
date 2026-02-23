@@ -1,6 +1,8 @@
 package job
 
 import (
+	"time"
+
 	jobEntity "recon-service/internal/domain/job"
 	"recon-service/internal/usecase/reconcile"
 )
@@ -20,8 +22,8 @@ type JobPayload struct {
 	JobID  string
 	System []byte
 	Banks  []BankFile
-	Start  string
-	End    string
+	Start  time.Time
+	End    time.Time
 }
 
 func NewWorker(repo jobEntity.Repository, service reconcile.Service) *Worker {
@@ -36,6 +38,7 @@ func NewWorker(repo jobEntity.Repository, service reconcile.Service) *Worker {
 
 type Service interface {
 	Create() (*jobEntity.Job, error)
+	CreateWithKey(idempotencyKey string) (res *jobEntity.Job, existJob bool)
 	Get(id string) (*jobEntity.Job, error)
 }
 

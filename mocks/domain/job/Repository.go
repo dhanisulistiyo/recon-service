@@ -112,6 +112,64 @@ func (_c *Repository_Get_Call) RunAndReturn(run func(string) (*job.Job, bool)) *
 	return _c
 }
 
+// GetByIdempotencyKey provides a mock function with given fields: key
+func (_m *Repository) GetByIdempotencyKey(key string) (*job.Job, bool) {
+	ret := _m.Called(key)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetByIdempotencyKey")
+	}
+
+	var r0 *job.Job
+	var r1 bool
+	if rf, ok := ret.Get(0).(func(string) (*job.Job, bool)); ok {
+		return rf(key)
+	}
+	if rf, ok := ret.Get(0).(func(string) *job.Job); ok {
+		r0 = rf(key)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*job.Job)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(string) bool); ok {
+		r1 = rf(key)
+	} else {
+		r1 = ret.Get(1).(bool)
+	}
+
+	return r0, r1
+}
+
+// Repository_GetByIdempotencyKey_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetByIdempotencyKey'
+type Repository_GetByIdempotencyKey_Call struct {
+	*mock.Call
+}
+
+// GetByIdempotencyKey is a helper method to define mock.On call
+//   - key string
+func (_e *Repository_Expecter) GetByIdempotencyKey(key interface{}) *Repository_GetByIdempotencyKey_Call {
+	return &Repository_GetByIdempotencyKey_Call{Call: _e.mock.On("GetByIdempotencyKey", key)}
+}
+
+func (_c *Repository_GetByIdempotencyKey_Call) Run(run func(key string)) *Repository_GetByIdempotencyKey_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(string))
+	})
+	return _c
+}
+
+func (_c *Repository_GetByIdempotencyKey_Call) Return(_a0 *job.Job, _a1 bool) *Repository_GetByIdempotencyKey_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *Repository_GetByIdempotencyKey_Call) RunAndReturn(run func(string) (*job.Job, bool)) *Repository_GetByIdempotencyKey_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Update provides a mock function with given fields: _a0
 func (_m *Repository) Update(_a0 *job.Job) {
 	_m.Called(_a0)

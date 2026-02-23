@@ -78,6 +78,64 @@ func (_c *Service_Create_Call) RunAndReturn(run func() (*job.Job, error)) *Servi
 	return _c
 }
 
+// CreateWithKey provides a mock function with given fields: idempotencyKey
+func (_m *Service) CreateWithKey(idempotencyKey string) (*job.Job, bool) {
+	ret := _m.Called(idempotencyKey)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateWithKey")
+	}
+
+	var r0 *job.Job
+	var r1 bool
+	if rf, ok := ret.Get(0).(func(string) (*job.Job, bool)); ok {
+		return rf(idempotencyKey)
+	}
+	if rf, ok := ret.Get(0).(func(string) *job.Job); ok {
+		r0 = rf(idempotencyKey)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*job.Job)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(string) bool); ok {
+		r1 = rf(idempotencyKey)
+	} else {
+		r1 = ret.Get(1).(bool)
+	}
+
+	return r0, r1
+}
+
+// Service_CreateWithKey_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateWithKey'
+type Service_CreateWithKey_Call struct {
+	*mock.Call
+}
+
+// CreateWithKey is a helper method to define mock.On call
+//   - idempotencyKey string
+func (_e *Service_Expecter) CreateWithKey(idempotencyKey interface{}) *Service_CreateWithKey_Call {
+	return &Service_CreateWithKey_Call{Call: _e.mock.On("CreateWithKey", idempotencyKey)}
+}
+
+func (_c *Service_CreateWithKey_Call) Run(run func(idempotencyKey string)) *Service_CreateWithKey_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(string))
+	})
+	return _c
+}
+
+func (_c *Service_CreateWithKey_Call) Return(res *job.Job, existJob bool) *Service_CreateWithKey_Call {
+	_c.Call.Return(res, existJob)
+	return _c
+}
+
+func (_c *Service_CreateWithKey_Call) RunAndReturn(run func(string) (*job.Job, bool)) *Service_CreateWithKey_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Get provides a mock function with given fields: id
 func (_m *Service) Get(id string) (*job.Job, error) {
 	ret := _m.Called(id)

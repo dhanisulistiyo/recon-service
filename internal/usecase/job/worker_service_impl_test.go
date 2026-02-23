@@ -2,14 +2,15 @@ package job
 
 import (
 	"testing"
+	"time"
+
+	"github.com/stretchr/testify/mock"
 
 	jobEntity "recon-service/internal/domain/job"
 	"recon-service/internal/domain/reconcile"
 	"recon-service/internal/shared/constants"
 	jobMocks "recon-service/mocks/domain/job"
 	reconMocks "recon-service/mocks/usecase/reconcile"
-
-	"github.com/stretchr/testify/mock"
 )
 
 func TestWorker_Process(t *testing.T) {
@@ -23,10 +24,12 @@ func TestWorker_Process(t *testing.T) {
 
 	t.Run("successful process", func(t *testing.T) {
 		jobID := "job-1"
+		startDate, _ := time.Parse("2006-01-02", "2024-01-01")
+		endDate, _ := time.Parse("2006-01-02", "2024-01-31")
 		payload := &JobPayload{
 			JobID:  jobID,
-			Start:  "2024-01-01",
-			End:    "2024-01-31",
+			Start:  startDate,
+			End:    endDate,
 			System: []byte("trxID,amount,type,transactionTime\nTRX001,100.00,CREDIT,2024-01-10T10:00:00Z"),
 			Banks: []BankFile{
 				{
@@ -67,9 +70,10 @@ func TestWorker_Process(t *testing.T) {
 
 	t.Run("invalid transactions - should fail job", func(t *testing.T) {
 		jobID := "job-fail"
+		startDate, _ := time.Parse("2006-01-02", "invalid")
 		payload := &JobPayload{
 			JobID: jobID,
-			Start: "invalid-date",
+			Start: startDate,
 		}
 
 		existingJob := &jobEntity.Job{ID: jobID, Status: constants.StatusProcessing}
