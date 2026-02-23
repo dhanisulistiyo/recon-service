@@ -1,5 +1,7 @@
 package reconcile
 
+import "recon-service/internal/domain/reconcile"
+
 type reconcileService struct {
 }
 
@@ -8,5 +10,5 @@ func NewService() Service {
 }
 
 type Service interface {
-	Execute()
+	Execute(system []reconcile.SystemTransaction, banks []reconcile.BankTransaction) (reconcile.Summary, error)
 }
