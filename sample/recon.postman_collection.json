@@ -1,0 +1,124 @@
+{
+  "info": {
+    "_postman_id": "3c6591fd-41fd-4bac-848f-07268537006e",
+    "name": "recon",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "22616425",
+    "_collection_link": "https://go.postman.co/collection/22616425-3c6591fd-41fd-4bac-848f-07268537006e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{local}}/health",
+          "host": [
+            "{{local}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "reconcile",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "type": "file",
+              "key": "system_file",
+              "src": "postman-cloud:///1f1109a6-9f22-4180-a4d2-d87e6e70000f"
+            },
+            {
+              "type": "file",
+              "key": "bank_files",
+              "src": "postman-cloud:///1f1109a7-7c89-4c80-a4c8-bfaa2844ab1d"
+            },
+            {
+              "type": "file",
+              "key": "bank_files",
+              "src": "postman-cloud:///1f1109a7-f448-4140-9385-08280bd061d8"
+            },
+            {
+              "type": "text",
+              "key": "start_date",
+              "value": "2024-01-01"
+            },
+            {
+              "type": "text",
+              "key": "end_date",
+              "value": "2024-01-31"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{local}}/reconcile",
+          "host": [
+            "{{local}}"
+          ],
+          "path": [
+            "reconcile"
+          ]
+        },
+        "description": "Generated from cURL: curl -X POST http://localhost:8081/reconcile \\\n  -F \"system_file=@system.csv\" \\\n  -F \"bank_files=@bca.csv\" \\\n  -F \"bank_files=@mandiri.csv\" \\\n  -F \"start_date=2024-01-01\" \\\n  -F \"end_date=2024-01-31\""
+      },
+      "response": []
+    },
+    {
+      "name": "jobs by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{local}}/jobs/8de97312-ce02-48f5-9c34-684eda3fc9d3",
+          "host": [
+            "{{local}}"
+          ],
+          "path": [
+            "jobs",
+            "8de97312-ce02-48f5-9c34-684eda3fc9d3"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "local",
+      "value": ""
+    }
+  ]
+}
